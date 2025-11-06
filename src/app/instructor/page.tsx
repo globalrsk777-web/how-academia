@@ -47,7 +47,7 @@ export default function InstructorDashboard() {
     <div className="space-y-8">
       <div>
         <h1 className="text-4xl font-heading font-bold mb-2">Instructor Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back! Here's an overview of your teaching activities.</p>
+        <p className="text-muted-foreground">Welcome back! Here&apos;s an overview of your teaching activities.</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -69,7 +69,7 @@ export default function InstructorDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.activeCourses}</div>
-            <p className="text-xs text-muted-foreground">Courses you're teaching</p>
+            <p className="text-xs text-muted-foreground">Courses you&apos;re teaching</p>
           </CardContent>
         </Card>
 

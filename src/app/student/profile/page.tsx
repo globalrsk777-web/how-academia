@@ -55,7 +55,7 @@ export default function StudentProfilePage() {
         <Card>
           <CardHeader>
             <CardTitle>Enrolled Courses</CardTitle>
-            <CardDescription>Courses you're currently enrolled in</CardDescription>
+            <CardDescription>Courses you&apos;re currently enrolled in</CardDescription>
           </CardHeader>
           <CardContent>
             {courses.length > 0 ? (

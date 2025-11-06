@@ -40,7 +40,7 @@ export default function StudentDashboard() {
     <div className="space-y-8">
       <div>
         <h1 className="text-4xl font-heading font-bold mb-2">Student Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back! Here's your learning overview.</p>
+        <p className="text-muted-foreground">Welcome back! Here&apos;s your learning overview.</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">

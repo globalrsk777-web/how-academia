@@ -37,7 +37,7 @@ export default function InstitutionDashboard() {
     <div className="space-y-8">
       <div>
         <h1 className="text-4xl font-heading font-bold mb-2">Institution Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back! Here's an overview of your institution.</p>
+        <p className="text-muted-foreground">Welcome back! Here&apos;s an overview of your institution.</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">

@@ -73,7 +73,7 @@ export default function InstructorProfilePage() {
         <Card>
           <CardHeader>
             <CardTitle>Courses You Teach</CardTitle>
-            <CardDescription>All courses you're currently teaching</CardDescription>
+            <CardDescription>All courses you&apos;re currently teaching</CardDescription>
           </CardHeader>
           <CardContent>
             {courses.length > 0 ? (
