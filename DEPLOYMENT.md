@@ -60,3 +60,4 @@ If you integrate Genkit AI features, you would need:
 - All data is client-side only (mock data)
 - No database connection needed for the prototype
 
+great project 
