@@ -40,3 +40,11 @@ next-env.d.ts
 firebase-debug.log
 firestore-debug.log
 
+# build artifacts
+.package-lock.json
+app-build-manifest.json
+build-manifest.json
+react-loadable-manifest.json
+trace
+*.log
+
