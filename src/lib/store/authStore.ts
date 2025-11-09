@@ -24,6 +24,9 @@ class AuthStore {
   private users: Map<string, { password: string; profile: UserProfile }> = new Map();
 
   constructor() {
+    // Initialize default test users
+    this.initializeDefaultUsers();
+    
     // Load from localStorage if available
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("auth_user");
@@ -37,6 +40,60 @@ class AuthStore {
         }
       }
     }
+  }
+
+  // Initialize default test users
+  private initializeDefaultUsers() {
+    const defaultUsers = [
+      {
+        email: "student@how.academia",
+        password: "student123",
+        profile: {
+          id: "default-student-1",
+          email: "student@how.academia",
+          name: "John Student",
+          role: "student" as UserRole,
+          bio: "Third-year student pursuing Bachelor of Science. Interested in mathematics and physics.",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      },
+      {
+        email: "instructor@how.academia",
+        password: "instructor123",
+        profile: {
+          id: "default-instructor-1",
+          email: "instructor@how.academia",
+          name: "Dr. Nakato Mary",
+          role: "instructor" as UserRole,
+          bio: "Senior Lecturer in Agriculture at Makerere University with 15+ years of experience. Specializes in crop management, soil science, and sustainable farming practices.",
+          subject: "Agriculture",
+          pricePerSession: 50000,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      },
+      {
+        email: "institution@how.academia",
+        password: "institution123",
+        profile: {
+          id: "default-institution-1",
+          email: "institution@how.academia",
+          name: "Makerere University Admin",
+          role: "institution" as UserRole,
+          bio: "Administrator for Makerere University",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      },
+    ];
+
+    // Only initialize if users don't exist (to avoid overwriting)
+    defaultUsers.forEach(({ email, password, profile }) => {
+      if (!this.users.has(email)) {
+        this.users.set(email, { password, profile });
+      }
+    });
   }
 
   // Subscribe to auth state changes

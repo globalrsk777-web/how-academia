@@ -14,9 +14,11 @@ import {
   GraduationCap,
   Video,
   LogOut,
+  CreditCard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageLoading } from "@/components/ui/loading";
+import { BackButton } from "@/components/ui/back-button";
 
 export default function StudentLayout({
   children,
@@ -69,6 +71,9 @@ export default function StudentLayout({
         <SidebarItem href="/live-sessions" icon={<Video className="h-4 w-4" />}>
           Live Sessions
         </SidebarItem>
+        <SidebarItem href="/student/billing" icon={<CreditCard className="h-4 w-4" />}>
+          Billing
+        </SidebarItem>
         <SidebarItem href="/institutions" icon={<GraduationCap className="h-4 w-4" />}>
           Institutions
         </SidebarItem>
@@ -84,7 +89,10 @@ export default function StudentLayout({
         </div>
       </Sidebar>
       <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 animate-fade-in">
-        <div className="max-w-7xl mx-auto">{children}</div>
+        <div className="max-w-7xl mx-auto">
+          <BackButton />
+          {children}
+        </div>
       </main>
     </div>
   );

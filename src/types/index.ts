@@ -87,6 +87,9 @@ export interface Institution {
   phone?: string;
   email?: string;
   logo?: string;
+  staffCount?: number;
+  price?: number;
+  priceType?: "monthly" | "yearly" | "free";
   createdAt: string;
   updatedAt: string;
 }

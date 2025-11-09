@@ -115,12 +115,35 @@ Authentication is handled by a TypeScript-based auth store that:
 - Auto-creates accounts on login if they don't exist
 - Syncs with data store automatically
 
+## Test Accounts
+
+The application comes with pre-configured test accounts for each role:
+
+### Student Account
+- **Email:** `student@how.academia`
+- **Password:** `student123`
+- **Role:** Student
+
+### Instructor Account
+- **Email:** `instructor@how.academia`
+- **Password:** `instructor123`
+- **Role:** Instructor
+
+### Institution Account
+- **Email:** `institution@how.academia`
+- **Password:** `institution123`
+- **Role:** Institution Administrator
+
+> **Note:** You can also create new accounts by logging in with any email/password combination. The system will automatically create the account if it doesn't exist.
+
+For more details, see [TEST_ACCOUNTS.md](./TEST_ACCOUNTS.md).
+
 ## Usage
 
 ### Login
 
 1. Navigate to `/login`
-2. Enter your email and password
+2. Enter your email and password (use test accounts above or create your own)
 3. Select your role (Student, Instructor, or Institution)
 4. Click "Sign In / Sign Up"
 

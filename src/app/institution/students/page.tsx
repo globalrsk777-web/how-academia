@@ -1,11 +1,27 @@
 "use client";
 
 import { AddStudentDialog } from "@/components/institution/AddStudentDialog";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { authStore } from "@/lib/store/authStore";
-import { UserPlus, User } from "lucide-react";
+import { UserPlus, MoreVertical } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { UserProfile } from "@/lib/store/authStore";
+import { LoadingSpinner } from "@/components/ui/loading";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function InstitutionStudentsPage() {
   const [students, setStudents] = useState<UserProfile[]>([]);
@@ -26,50 +42,80 @@ export default function InstitutionStudentsPage() {
     loadStudents();
   }, []);
 
+  // Mock students
+  const mockStudents = [
+    { id: "stud1", name: "Alex Johnson", email: "alex.j@example.com", role: "student" as const, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+    { id: "stud2", name: "Maria Garcia", email: "maria.g@example.com", role: "student" as const, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+    { id: "stud3", name: "Chen Wei", email: "chen.w@example.com", role: "student" as const, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+    { id: "stud4", name: "Jane Doe", email: "jane.doe@example.com", role: "student" as const, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+    { id: "stud5", name: "David Miller", email: "david.m@example.com", role: "student" as const, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+  ];
+
+  const displayStudents = students && students.length > 0 ? students : mockStudents;
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       <div className="flex items-center justify-between">
-        <div>
+        <div className="space-y-2">
           <h1 className="text-3xl font-bold font-heading">Students</h1>
-          <p className="text-muted-foreground">Manage students</p>
         </div>
         <AddStudentDialog />
       </div>
 
-      {loading ? (
-        <div className="text-center py-8">Loading...</div>
-      ) : students && students.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {students.map((student) => (
-            <Card key={student.id}>
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <User className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <CardTitle>{student.name}</CardTitle>
-                    <CardDescription>{student.email}</CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {student.bio && (
-                  <p className="text-sm text-muted-foreground">{student.bio}</p>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+      {loading && students ? (
+        <LoadingSpinner />
       ) : (
         <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <UserPlus className="h-12 w-12 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">No students yet. Add your first student!</p>
+          <CardHeader>
+            <CardTitle>Student List</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Student</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {displayStudents.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={3} className="text-center py-8">
+                      <div className="flex flex-col items-center justify-center">
+                        <UserPlus className="h-12 w-12 text-muted-foreground mb-4 opacity-50" />
+                        <p className="text-muted-foreground">No students yet. Add your first student!</p>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  displayStudents.map((student) => (
+                    <TableRow key={student.id} className="hover:bg-muted/50">
+                      <TableCell className="font-medium">{student.name}</TableCell>
+                      <TableCell>{student.email}</TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>View Profile</DropdownMenuItem>
+                            <DropdownMenuItem>Edit Student</DropdownMenuItem>
+                            <DropdownMenuItem>View Courses</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">Remove Student</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       )}
     </div>
   );
 }
-

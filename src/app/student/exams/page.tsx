@@ -2,10 +2,20 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useCollection, where } from "@/lib/firebase/hooks";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/loading";
 import type { Exam, ExamSubmission } from "@/types";
-import { FileText } from "lucide-react";
+import { FileText, Eye, Play } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 
 export default function StudentExamsPage() {
   const { userProfile } = useAuth();
@@ -17,77 +27,106 @@ export default function StudentExamsPage() {
     studentId ? [where("studentId", "==", studentId)] : undefined
   );
 
+  // Mock exams data
+  const mockExams = [
+    { id: "1", title: "Physics Midterm", status: "Graded" as const },
+    { id: "2", title: "History Pop Quiz", status: "Graded" as const },
+    { id: "3", title: "Algebra II Final", status: "In Progress" as const },
+    { id: "4", title: "Art History Paper", status: "Pending" as const },
+  ];
+
   const hasSubmission = (examId: string) => {
     return submissions?.some((s) => s.examId === examId);
   };
 
-  const getSubmission = (examId: string) => {
-    return submissions?.find((s) => s.examId === examId);
+  const getExamStatus = (examId: string): "Graded" | "In Progress" | "Pending" => {
+    if (hasSubmission(examId)) {
+      const submission = submissions?.find((s) => s.examId === examId);
+      if (submission?.score !== undefined) {
+        return "Graded";
+      }
+      return "In Progress";
+    }
+    return "Pending";
+  };
+
+  const displayExams = exams && exams.length > 0 
+    ? exams.map(exam => ({
+        id: exam.id,
+        title: exam.title,
+        status: getExamStatus(exam.id),
+      }))
+    : mockExams;
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "Graded":
+        return <Badge className="bg-green-500/10 text-green-600 dark:text-green-400">Graded</Badge>;
+      case "In Progress":
+        return <Badge className="bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">In Progress</Badge>;
+      case "Pending":
+        return <Badge className="bg-gray-500/10 text-gray-600 dark:text-gray-400">Pending</Badge>;
+      default:
+        return <Badge>{status}</Badge>;
+    }
   };
 
   return (
-    <div className="space-y-8">
-      <div>
+    <div className="space-y-6 md:space-y-8">
+      <div className="space-y-2">
         <h1 className="text-3xl font-bold font-heading">My Exams</h1>
-        <p className="text-muted-foreground">Available exams and your results</p>
       </div>
 
-      {examsLoading ? (
-        <div className="text-center py-8">Loading...</div>
-      ) : exams && exams.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {exams.map((exam) => {
-            const submitted = hasSubmission(exam.id);
-            const submission = getSubmission(exam.id);
-
-            return (
-              <Card key={exam.id}>
-                <CardHeader>
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-primary" />
-                    <CardTitle>{exam.title}</CardTitle>
-                  </div>
-                  <CardDescription>{exam.description || "No description"}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="space-y-2 text-sm">
-                      <p className="text-muted-foreground">
-                        Course: {exam.courseName || "Unknown"}
-                      </p>
-                      <p className="text-muted-foreground">
-                        Duration: {exam.duration} minutes
-                      </p>
-                      {submitted && submission?.score !== undefined && (
-                        <p className="font-medium">
-                          Score: {submission.score}%
-                        </p>
-                      )}
-                    </div>
-                    {submitted ? (
-                      <Button variant="outline" className="w-full" disabled>
-                        View Results
-                      </Button>
-                    ) : (
-                      <Button className="w-full">
-                        Start Exam
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+      {examsLoading && exams ? (
+        <LoadingSpinner />
       ) : (
         <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <FileText className="h-12 w-12 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">No exams available</p>
+          <CardHeader>
+            <CardTitle>Exam List</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Exam Title</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {displayExams.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={3} className="text-center py-8">
+                      <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-50" />
+                      <p className="text-muted-foreground">No exams available</p>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  displayExams.map((exam) => (
+                    <TableRow key={exam.id}>
+                      <TableCell className="font-medium">{exam.title}</TableCell>
+                      <TableCell>{getStatusBadge(exam.status)}</TableCell>
+                      <TableCell className="text-right">
+                        {exam.status === "Graded" ? (
+                          <Button variant="outline" size="sm">
+                            <Eye className="mr-2 h-4 w-4" />
+                            View Results
+                          </Button>
+                        ) : (
+                          <Button size="sm">
+                            <Play className="mr-2 h-4 w-4" />
+                            Start Exam
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       )}
     </div>
   );
 }
-

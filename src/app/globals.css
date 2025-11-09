@@ -135,4 +135,32 @@
   .gradient-border > * {
     border-radius: calc(0.5rem - 1px);
   }
+  
+  @keyframes pulse-slow {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  
+  .backdrop-blur-md {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .backdrop-blur-lg {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
 }
