@@ -1,0 +1,8 @@
+{
+  "lib\\store\\authStore.ts -> ./dataStore": {
+    "id": "lib\\store\\authStore.ts -> ./dataStore",
+    "files": [
+      "static/chunks/_app-pages-browser_src_lib_store_dataStore_ts.js"
+    ]
+  }
+}
